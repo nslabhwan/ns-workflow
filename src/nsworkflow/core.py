@@ -75,7 +75,7 @@ class Workspace:
 
     def resolve(self, relative: str | Path, *, for_write: bool = False) -> Path:
         rel = Path(relative)
-        if rel.is_absolute():
+        if rel.is_absolute() or rel.anchor:
             raise PolicyError("absolute paths are not allowed")
         candidate = self.root / rel
         parent = candidate.parent.resolve()
