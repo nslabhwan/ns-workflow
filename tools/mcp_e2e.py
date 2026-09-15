@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 import tempfile
 import sys
 from pathlib import Path
@@ -40,11 +41,12 @@ async def main() -> None:
             assert "after_sha256" in str(write_result.content)
             print("WRITE_OK", True)
 
+            python_cmd = "python" if os.name == "nt" else "python3"
             verify_result = await session.call_tool(
                 "ns_verify",
                 {
                     "argv": [
-                        "python3",
+                        python_cmd,
                         "-c",
                         "from pathlib import Path; assert Path('hello.txt').read_text() == 'after\\n'",
                     ]
