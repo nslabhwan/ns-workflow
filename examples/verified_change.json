@@ -1,0 +1,49 @@
+{
+  "id": "verified-change",
+  "version": "1",
+  "max_transitions": 20,
+  "steps": [
+    {
+      "id": "read_current",
+      "kind": "call",
+      "uses": "workspace.read",
+      "with": {"path": "status.txt"},
+      "save_as": "before"
+    },
+    {
+      "id": "approve_change",
+      "kind": "approval",
+      "message": "Apply the proposed change to status.txt?",
+      "accept_decisions": ["approve"]
+    },
+    {
+      "id": "apply_change",
+      "kind": "call",
+      "uses": "workspace.write",
+      "mode": "action",
+      "effect": "local_mutation",
+      "with": {
+        "path": "status.txt",
+        "content": "status=fixed\n",
+        "expected_sha256": "${context.before.sha256}"
+      }
+    },
+    {
+      "id": "verify_change",
+      "kind": "verify",
+      "uses": "workspace.verify",
+      "with": {
+        "argv": [
+          "python3",
+          "-c",
+          "from pathlib import Path; assert Path('status.txt').read_text() == 'status=fixed\\n'"
+        ]
+      }
+    },
+    {
+      "id": "done",
+      "kind": "end",
+      "outcome": "VERIFIED_COMPLETE"
+    }
+  ]
+}
