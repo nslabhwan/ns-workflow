@@ -102,7 +102,7 @@ class Workspace:
         if git and (self.root / ".git").exists():
             cp = subprocess.run(
                 [git, "status", "--short"], cwd=self.root, text=True,
-                capture_output=True, timeout=10, env=_minimal_env(), check=False,
+                capture_output=True, timeout=10, env=_minimal_env(), stdin=subprocess.DEVNULL, check=False,
             )
             git_status = cp.stdout.strip()
         return {
@@ -203,6 +203,7 @@ class Workspace:
                 capture_output=True,
                 timeout=bounded_timeout,
                 env=_minimal_env(),
+                stdin=subprocess.DEVNULL,
                 check=False,
             )
             code = cp.returncode
