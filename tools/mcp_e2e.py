@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import os
 import tempfile
 import sys
 from pathlib import Path
@@ -16,6 +15,7 @@ async def main() -> None:
     root = Path(tempfile.mkdtemp(prefix="nsw-mcp-e2e-"))
     init_config(root, overwrite=True)
     (root / "hello.txt").write_text("before\n", encoding="utf-8")
+    (root / "expected.txt").write_text("after\n", encoding="utf-8")
 
     params = StdioServerParameters(
         command=sys.executable,
@@ -41,14 +41,17 @@ async def main() -> None:
             assert "after_sha256" in str(write_result.content)
             print("WRITE_OK", True)
 
-            python_cmd = "python" if os.name == "nt" else "python3"
             verify_result = await session.call_tool(
                 "ns_verify",
                 {
                     "argv": [
-                        python_cmd,
-                        "-c",
-                        "from pathlib import Path; assert Path('hello.txt').read_text() == 'after\\n'",
+                        "git",
+                        "diff",
+                        "--no-index",
+                        "--exit-code",
+                        "--no-ext-diff",
+                        "expected.txt",
+                        "hello.txt",
                     ]
                 },
             )
