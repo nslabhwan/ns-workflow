@@ -17,8 +17,8 @@ async def main() -> None:
     (root / "hello.txt").write_text("before\n", encoding="utf-8")
 
     params = StdioServerParameters(
-        command=str(Path(sys.executable).with_name("nsw")),
-        args=["mcp", "--workspace", str(root)],
+        command=sys.executable,
+        args=["-m", "nsworkflow.cli", "mcp", "--workspace", str(root)],
     )
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:
