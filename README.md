@@ -2,6 +2,8 @@
 
 **Give AI real work. Make it prove the result.**
 
+**NS / OpenSynapse:** https://getnslab.com/ — for the broader ChatGPT + Linux/Android work-node path.
+
 [![CI](https://github.com/nslabhwan/ns-workflow/actions/workflows/ci.yml/badge.svg)](https://github.com/nslabhwan/ns-workflow/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
